@@ -98,7 +98,7 @@ app.post("/m2x-trigger", function(req, res) {
             'content-type' : 'application/x-www-form-urlencoded',
             'Accepts': 'application/json'
           },
-          url:     'https://webhook.site/400a74b0-74fa-4c53-8b84-f96c60e77668,
+          url:     'https://webhook.site/400a74b0-74fa-4c53-8b84-f96c60e77668',
           form:    {
             to: recipient,
             message: message,
