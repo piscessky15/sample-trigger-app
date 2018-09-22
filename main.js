@@ -68,21 +68,22 @@ app.post("/m2x-trigger", function(req, res) {
     if(deliveryMethod == "notification"){
         request.post({
           headers: {
-            'content-type' : 'application/json',
-            'Accepts': 'application/json',
+              'content-type' : 'application/json',
+              'Accepts': 'application/json',
               'Authorization': 'key=AIzaSyB3PKzAXMaYVKAuVGZPXxBko1BiKRE_RpA'
           },
           url:     'https://fcm.googleapis.com/fcm/send',
-          data:    {
- "to" : "f5raBMjZ8oY:APA91bE6bhWerkZ4NXhNOj30rLQqrLtBI82ZUuCR-NpcaVrjze1CkI1RPHtmKphuj97e9MTL3mdE_T2zwaxmcgKO7ingeGhNuIGGAm1U7BOp3ZitwpIuyraOueyPU9U3XLGvoerLXesx",
- "data" : {
- 	"parcelDispatch": true,
-  "parcelId": "EMS1231513123",
-  "etaHour": "3",
-  "etaMinute": "25",
-  "address": "No.1, Jalan BA 3, Taman K, Selangor"
- } 
-}
+          json:    {
+              "to" : recipient,
+              "data" : {
+                  "message": message
+                  "parcelDispatch": true,
+                  "parcelId": "EMS1231513123",
+                  "etaHour": "3",
+                  "etaMinute": "25",
+                  "address": "No.1, Jalan BA 3, Taman K, Selangor"
+              } 
+          }
         }, function(error, response, body){
           if (!error && response.statusCode == 201)  {
             console.log('Message sent!');
