@@ -65,24 +65,22 @@ app.post("/m2x-trigger", function(req, res) {
     console.log("Preparing to send message: " + message);
     console.log("to: " + recipient);
 
-    if(deliveryMethod == "notification"){
+    if(deliveryMethod == "notification") {
         request.post({
           headers: {
-              'content-type' : 'application/json',
-              'Accepts': 'application/json',
-              'Authorization': 'key=AIzaSyB3PKzAXMaYVKAuVGZPXxBko1BiKRE_RpA'
+            'content-type' : 'application/json',
+            'Accepts': 'application/json'
           },
           url:     'https://fcm.googleapis.com/fcm/send',
           json:    {
-              "to" : recipient,
-              "data" : {
-                  "message": message
-                  "parcelDispatch": true,
-                  "parcelId": "EMS1231513123",
-                  "etaHour": "3",
-                  "etaMinute": "25",
-                  "address": "No.1, Jalan BA 3, Taman K, Selangor"
-              } 
+            to: recipient,
+            data : {
+                message: message,
+                parcelId: "EMS1231513123",
+                etaHour: "3",
+                etaMinute: "25",
+                address: "No.1, Jalan BA 3, Taman K, Selangor"
+            } 
           }
         }, function(error, response, body){
           if (!error && response.statusCode == 201)  {
@@ -92,7 +90,8 @@ app.post("/m2x-trigger", function(req, res) {
             console.log('Error was: ' + apiResult.message);
           }
         })
-    }else if(deliveryMethod == "sms") {
+
+    } else if(deliveryMethod == "sms") {
         request.post({
           headers: {
             'content-type' : 'application/x-www-form-urlencoded',
