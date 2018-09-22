@@ -68,8 +68,7 @@ app.post("/m2x-trigger", function(req, res) {
     if(deliveryMethod == "notification") {
         request.post({
           headers: {
-            'content-type' : 'application/json',
-            'Accepts': 'application/json',
+            'Content-type' : 'application/json',
               'Authorization': 'key=AIzaSyB3PKzAXMaYVKAuVGZPXxBko1BiKRE_RpA'
           },
           url:     'https://fcm.googleapis.com/fcm/send',
