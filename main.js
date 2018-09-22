@@ -92,16 +92,17 @@ app.post("/m2x-trigger", function(req, res) {
           }
         })
 
-    } else if(deliveryMethod == "sms") {
+    } else if(deliveryMethod == "hook") {
         request.post({
           headers: {
             'content-type' : 'application/x-www-form-urlencoded',
             'Accepts': 'application/json'
           },
-          url:     process.env.BLOWERIO_URL + 'messages',
+          url:     'https://webhook.site/400a74b0-74fa-4c53-8b84-f96c60e77668,
           form:    {
             to: recipient,
-            message: message
+            message: message,
+            data: customData
           }
         }, function(error, response, body){
           if (!error && response.statusCode == 201)  {
