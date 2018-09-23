@@ -5,11 +5,10 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var request = require('request');
-var FCM = require('fcm-node')
+var FCM = require('fcm-push');
 
-var serverKey = require('./firebase.json') //put the generated private key path here    
-
-var fcm = new FCM(serverKey)
+var serverKey = 'AAAADF7mSTM:APA91bGNG6kOH6d3xb1ytRrCHXMfM-4rLHmFS2AfQ3oSiXAiXJtPNmSnE8sqWjArxR5LHIdIH-yi14cW6nnZealZHe5Q1kW2b7RtaFR0BWaahVWzzuRwNAL_Qtupb_UeUAPhbkYkLtuE';
+var fcm = new FCM(serverKey);
 
 // Initialize express application that will handle trigger requests from the M2X API
 var app = express();
@@ -83,9 +82,9 @@ app.post("/m2x-trigger", function (req, res) {
         
         fcm.send(message, function(err, response){
             if (err) {
-                console.log("Something has gone wrong!")
+                console.log("Something has gone wrong!");
             } else {
-                console.log("Successfully sent with response: ", response)
+                console.log("Successfully sent with response: ", response);
             }
         });
     } else if (deliveryMethod == "sms") {
