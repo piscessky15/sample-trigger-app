@@ -72,7 +72,6 @@ app.post("/m2x-trigger", function (req, res) {
     if (deliveryMethod == "notification") {
         var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
             to: recipient, 
-            collapse_key: 'your_collapse_key',
             data: {  //you can send only notification or only data(or include both)
                 trigger: req.body.trigger
             }
