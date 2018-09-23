@@ -5,14 +5,11 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var request = require('request');
-var admin = require("firebase-admin");
+var FCM = require('fcm-node')
 
-var serviceAccount = require("firebase.json");
+var serverKey = require('firebase.json') //put the generated private key path here    
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://depot-7ca22.firebaseio.com"
-});
+var fcm = new FCM(serverKey)
 
 // Initialize express application that will handle trigger requests from the M2X API
 var app = express();
@@ -75,23 +72,19 @@ app.post("/m2x-trigger", function (req, res) {
 
     if (deliveryMethod == "notification") {
         var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-            token: recipient,
+            to: recipient,
             data: {
                 message: message,
-                parcelId: "EMS1231513123",
-                etaHour: "3",
-                etaMinute: "25",
-                address: "No.1, Jalan BA 3, Taman K, Selangor"
+                values: values
             }
         };
-        admin.messaging().send(message)
-            .then((response) => {
-                // Response is a message ID string.
-                console.log('Successfully sent message:', response);
-            })
-            .catch((error) => {
-                console.log('Error sending message:', error);
-            });
+        fcm.send(message, function (err, response) {
+            if (err) {
+                console.log("Something has gone wrong!")
+            } else {
+                console.log("Successfully sent with response: ", response)
+            }
+        })
 
     } else if (deliveryMethod == "hook") {
         request.post({
