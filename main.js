@@ -5,10 +5,14 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var request = require('request');
-var FCM = require('fcm-push');
+var admin = require('firebase-admin');
 
-var serverKey = 'AIzaSyB3PKzAXMaYVKAuVGZPXxBko1BiKRE_RpA';// 'AAAADF7mSTM:APA91bGNG6kOH6d3xb1ytRrCHXMfM-4rLHmFS2AfQ3oSiXAiXJtPNmSnE8sqWjArxR5LHIdIH-yi14cW6nnZealZHe5Q1kW2b7RtaFR0BWaahVWzzuRwNAL_Qtupb_UeUAPhbkYkLtuE';
-var fcm = new FCM(serverKey);
+var serviceAccount = require('./firebase.json');
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://depot-7ca22.firebaseio.com'
+});
 
 // Initialize express application that will handle trigger requests from the M2X API
 var app = express();
@@ -20,6 +24,31 @@ app.set("port", process.env.PORT || 5000);
 
 // bodyParser makes sure the JSON request data from the API comes as an object
 app.use(bodyParser.json());
+
+app.get("/test", function (req, res) {
+
+
+    var registrationToken = 'f5raBMjZ8oY:APA91bE6bhWerkZ4NXhNOj30rLQqrLtBI82ZUuCR-NpcaVrjze1CkI1RPHtmKphuj97e9MTL3mdE_T2zwaxmcgKO7ingeGhNuIGGAm1U7BOp3ZitwpIuyraOueyPU9U3XLGvoerLXesx';
+
+    // See documentation on defining a message payload.
+    var message = {
+        data: {
+            "trigger": "reach"
+        },
+        "token": registrationToken
+    };
+
+    // Send a message to the device corresponding to the provided
+    // registration token.
+    admin.messaging().send(message)
+        .then((response) => {
+            // Response is a message ID string.
+            console.log('Successfully sent message:', response);
+        })
+        .catch((error) => {
+            console.log('Error sending message:', error);
+        });
+});
 
 // Define HTTP endpoint that will receive trigger requests from AT&T M2X API
 app.post("/m2x-trigger", function (req, res) {
@@ -69,21 +98,49 @@ app.post("/m2x-trigger", function (req, res) {
     console.log("Preparing to send message: " + message);
     console.log("to: " + recipient);
 
-    if (deliveryMethod == "notification") {
-        var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-            to: recipient, 
-            data: {  //you can send only notification or only data(or include both)
-                trigger: req.body.trigger
-            }
-        }
-        
-        fcm.send(message, function(err, response){
-            if (err) {
-                console.log("Something has gone wrong!");
-            } else {
-                console.log("Successfully sent with response: ", response);
-            }
-        });
+    if (deliveryMethod == "trigger") {
+        // See documentation on defining a message payload.
+        var message = {
+            data: {
+                "trigger": "rain"
+            },
+            "token": recipient
+        };
+
+        // Send a message to the device corresponding to the provided
+        // registration token.
+        admin.messaging().send(message)
+            .then((response) => {
+                // Response is a message ID string.
+                console.log('Successfully sent message:', response);
+            })
+            .catch((error) => {
+                console.log('Error sending message:', error);
+            });
+    } else if (deliveryMethod == "notification") {
+
+        // See documentation on defining a message payload.
+        var message = {
+            "data": {
+                "parcelDispatch": true,
+                "parcelId": "EMS1231513123",
+                "etaHour": "3",
+                "etaMinute": "25",
+                "address": "No.1, Jalan BA 3, Taman K, Selangor"
+            },
+            "token": recipient
+        };
+
+        // Send a message to the device corresponding to the provided
+        // registration token.
+        admin.messaging().send(message)
+            .then((response) => {
+                // Response is a message ID string.
+                console.log('Successfully sent message:', response);
+            })
+            .catch((error) => {
+                console.log('Error sending message:', error);
+            });
     } else if (deliveryMethod == "sms") {
         request.post({
             headers: {
