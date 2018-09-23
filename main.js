@@ -7,7 +7,7 @@ var bodyParser = require("body-parser");
 var request = require('request');
 var FCM = require('fcm-push');
 
-var serverKey = 'AAAADF7mSTM:APA91bGNG6kOH6d3xb1ytRrCHXMfM-4rLHmFS2AfQ3oSiXAiXJtPNmSnE8sqWjArxR5LHIdIH-yi14cW6nnZealZHe5Q1kW2b7RtaFR0BWaahVWzzuRwNAL_Qtupb_UeUAPhbkYkLtuE';
+var serverKey = 'AIzaSyB3PKzAXMaYVKAuVGZPXxBko1BiKRE_RpA';// 'AAAADF7mSTM:APA91bGNG6kOH6d3xb1ytRrCHXMfM-4rLHmFS2AfQ3oSiXAiXJtPNmSnE8sqWjArxR5LHIdIH-yi14cW6nnZealZHe5Q1kW2b7RtaFR0BWaahVWzzuRwNAL_Qtupb_UeUAPhbkYkLtuE';
 var fcm = new FCM(serverKey);
 
 // Initialize express application that will handle trigger requests from the M2X API
