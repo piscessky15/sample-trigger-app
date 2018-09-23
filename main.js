@@ -122,7 +122,7 @@ app.post("/m2x-trigger", function (req, res) {
         // See documentation on defining a message payload.
         var message = {
             "data": {
-                "parcelDispatch": true,
+                "parcelDispatch": "true",
                 "parcelId": "EMS1231513123",
                 "etaHour": "3",
                 "etaMinute": "25",
