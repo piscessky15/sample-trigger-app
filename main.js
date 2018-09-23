@@ -72,31 +72,32 @@ app.post("/m2x-trigger", function (req, res) {
 
     if (deliveryMethod == "notification") {
         var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-            to: recipient,
-            data: {
+            to: recipient, 
+            collapse_key: 'your_collapse_key',
+            data: {  //you can send only notification or only data(or include both)
                 message: message,
-                values: values
+                values: values,
+                trigger: req.body.trigger
             }
-        };
-        fcm.send(message, function (err, response) {
+        }
+        
+        fcm.send(message, function(err, response){
             if (err) {
                 console.log("Something has gone wrong!")
             } else {
                 console.log("Successfully sent with response: ", response)
             }
-        })
-
-    } else if (deliveryMethod == "hook") {
+        });
+    } else if (deliveryMethod == "sms") {
         request.post({
             headers: {
                 'content-type': 'application/x-www-form-urlencoded',
                 'Accepts': 'application/json'
             },
-            url: 'https://webhook.site/400a74b0-74fa-4c53-8b84-f96c60e77668',
+            url: process.env.BLOWERIO_URL + 'messages',
             form: {
                 to: recipient,
-                message: message,
-                data: customData
+                message: message
             }
         }, function (error, response, body) {
             if (!error && response.statusCode == 201) {
