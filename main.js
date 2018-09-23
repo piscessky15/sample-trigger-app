@@ -74,8 +74,6 @@ app.post("/m2x-trigger", function (req, res) {
             to: recipient, 
             collapse_key: 'your_collapse_key',
             data: {  //you can send only notification or only data(or include both)
-                message: message,
-                values: values,
                 trigger: req.body.trigger
             }
         }
