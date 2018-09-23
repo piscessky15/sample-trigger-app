@@ -7,7 +7,7 @@ var bodyParser = require("body-parser");
 var request = require('request');
 var FCM = require('fcm-node')
 
-var serverKey = require('firebase.json') //put the generated private key path here    
+var serverKey = require('./firebase.json') //put the generated private key path here    
 
 var fcm = new FCM(serverKey)
 
